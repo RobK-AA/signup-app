@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
-import App from './components/App';
+import Root from './components/Root';
 import * as serviceWorker from './serviceWorker';
 
 // 1
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('root');
   ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <Root />
   </ApolloProvider>, root);
 });
 

@@ -41,3 +41,9 @@ input {
   cursor: pointer;
   max-width: 250px;
 }
+
+.picture-container {
+  height: 100px;
+  width: 100px;
+  background-size: cover;
+}

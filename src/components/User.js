@@ -21,7 +21,7 @@ const User = (props) => {
         <>
           {data.users.map((user) => {
             return (
-                <div>
+                <div key={user.id}>
                     {user.name}, {user.username}, {user.email}, {user.picture}
                 </div>
                 )
