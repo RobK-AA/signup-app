@@ -1,20 +1,3 @@
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-
-// class Login extends React.Component {
-//     render() {
-//         return (
-//             <div>
-//                 Login page
-//                 <p>Need to create an account?</p>
-//                 <p><Link to="/">Sign Up</Link></p>
-//             </div>
-//         )
-//     }
-// }
-
-// export default Login;
-
 import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { useHistory } from 'react-router';
@@ -79,7 +62,9 @@ const Login = () => {
     variables: {
       name: formState.name,
       email: formState.email,
-      password: formState.password
+      password: formState.password,
+      username: formState.username,
+      picture: formState.picture
     },
     onCompleted: ({ signup }) => {
       localStorage.setItem(AUTH_TOKEN, signup.token);
@@ -87,62 +72,38 @@ const Login = () => {
     }
   });
 
-      function addPhoto(e) {
-        e.preventDefault();
-        const profilePhoto = new FileReader();
-        const photo = e.target.files[0];
+  function addPhoto(e) {
+    e.preventDefault();
+    const profilePhoto = new FileReader();
+    const photo = e.target.files[0];
 
-        profilePhoto.onloadend = () => {
-            let newPhotoUrl = formState.pictureUrl;
-            newPhotoUrl = profilePhoto.result
+    profilePhoto.onloadend = () => {
+        let newPhotoUrl = formState.pictureUrl;
+        newPhotoUrl = profilePhoto.result
 
-            let newPhoto = formState.picture;
-            newPhoto = photo;
+        let newPhoto = formState.picture;
+        newPhoto = photo;
 
-            setFormState({ 
-              ...formState,
-              pictureUrl: newPhotoUrl, 
-              picture: newPhoto });
-        }
-
+        setFormState({ 
+            ...formState,
+            pictureUrl: newPhotoUrl, 
+            picture: newPhoto 
+        });
+    }
         if (photo) {
             profilePhoto.readAsDataURL(photo);
         } else {
             alert("Please choose another file type")
         }
-    }
+  }
 
   return (
     <div>
       <h4 className="mv3">{formState.login ? 'Login' : 'Sign Up'}</h4>
       <div className="flex flex-column">
         {!formState.login && (
-          <input
-            value={formState.name}
-            onChange={(e) =>
-              setFormState({
-                ...formState,
-                name: e.target.value
-              })
-            }
-            type="text"
-            placeholder="Your name"
-          />
-        )}
-        {!formState.login && (
-          <input
-            value={formState.email}
-            onChange={(e) =>
-              setFormState({
-                ...formState,
-                email: e.target.value
-              })
-            }
-            type="text"
-            placeholder="Your email"
-          />
-        )}
-        {!formState.login && (
+          <>
+          <label>Username*</label>
           <input
             value={formState.username}
             onChange={(e) =>
@@ -154,7 +115,25 @@ const Login = () => {
             type="text"
             placeholder="Your username"
           />
+          </>
         )}
+        {!formState.login && (
+          <>
+          <label>Name*</label>
+          <input
+            value={formState.name}
+            onChange={(e) =>
+              setFormState({
+                ...formState,
+                name: e.target.value
+              })
+            }
+            type="text"
+            placeholder="Your name"
+          />
+          </>
+        )}
+        <label>Email Address*</label>
         <input
           value={formState.email}
           onChange={(e) =>
@@ -182,6 +161,7 @@ const Login = () => {
           </div>
           </>
         )}
+        <label>Password*</label>
         <input
           value={formState.password}
           onChange={(e) =>
@@ -193,6 +173,22 @@ const Login = () => {
           type="password"
           placeholder="Choose a safe password"
         />
+        {!formState.login && (
+          <div className="form-item">
+              <label>Confirm Password*</label>
+              <div className="input-item">
+                  <input 
+                  value={formState.confirmPassword}
+                  onChange={(e) =>
+                      setFormState({
+                          ...formState,
+                          confirmPassword: e.target.value
+                      })}
+                  type="text"
+                  placeholder="Confirm your password"></input>
+              </div>
+          </div>
+        )}
       </div>
       <div className="flex mt3">
         <button
