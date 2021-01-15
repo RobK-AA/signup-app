@@ -41,6 +41,7 @@ const Login = () => {
     email: '',
     password: '',
     name: '', 
+    username: '',
     confirmPassword: "",
     picture: null,
     pictureUrl: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
