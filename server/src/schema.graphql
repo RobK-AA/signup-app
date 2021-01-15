@@ -9,7 +9,7 @@ type Mutation {
     username: String!, 
     email: String!, 
     password: String!, 
-    picture: String!): User!
+    picture: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
 }
 
