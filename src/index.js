@@ -8,17 +8,19 @@ import * as serviceWorker from './serviceWorker';
 import {
   ApolloProvider,
   ApolloClient,
-  createHttpLink,
   InMemoryCache
 } from '@apollo/client';
 
-const httpLink = createHttpLink({
-  uri: 'http://localhost:4000'
-});
-
 const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache()
+  uri: "http://localhost:4000/graphql",
+  cache: new InMemoryCache(),
+  headers: {
+    authorization: localStorage.getItem("auth-token")
+  },
+  onError: ({ networkError, graphQLErrors }) => {
+    console.log("graphQLErrors", graphQLErrors);
+    console.log("networkError", networkError);
+  }
 });
 
 document.addEventListener('DOMContentLoaded', () => {

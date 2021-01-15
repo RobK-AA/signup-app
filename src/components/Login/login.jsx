@@ -48,7 +48,7 @@ const Login = () => {
     errors: {}
   });
 
-  const [login] = useMutation(LOGIN_MUTATION, {
+  const [login, {loading, error}] = useMutation(LOGIN_MUTATION, {
     variables: {
       email: formState.email,
       password: formState.password

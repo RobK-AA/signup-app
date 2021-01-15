@@ -12,6 +12,11 @@ const resolvers = {
 
 const prisma = new PrismaClient()
 
+const corsOptions = {
+    origin: "http://localhost:3000",
+    credentials: true
+  };
+
 const server = new ApolloServer({
     typeDefs: fs.readFileSync(
         path.join(__dirname, 'schema.graphql'),
@@ -20,7 +25,8 @@ const server = new ApolloServer({
     resolvers,
     context: {
         prisma,
-    }
+    },
+    cors: corsOptions
 })
 
 server
