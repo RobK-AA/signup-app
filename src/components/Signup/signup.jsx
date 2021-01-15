@@ -1,5 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { gql, useMutation } from '@apollo/client';
+
+const SIGNUP_MUTATION = gql`
+        mutation SignupMutation(
+            $email: String!
+            $username: String!
+            $name: String!
+            $password: String!
+            $picture: String!
+        ) {
+            signup(
+                email: $email
+                password: $password
+                name: $name
+                username: $username
+                picture: $picture
+            ) {
+                token
+            }
+        }
+    `;
 
 class Signup extends React.Component {
     constructor(props) {
@@ -38,6 +59,7 @@ class Signup extends React.Component {
         user.append("user[username]", this.state.username);
         user.append("user[email]", this.state.email);
         user.append("user[password]", this.state.password);
+        user.append("user[picture]", this.state.picture);
     
         this.props.createUser(user).then(
             () => {

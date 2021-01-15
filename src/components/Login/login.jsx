@@ -21,20 +21,24 @@ import { useHistory } from 'react-router';
 const AUTH_TOKEN = 'auth-token';
 
 const SIGNUP_MUTATION = gql`
-  mutation SignupMutation(
-    $email: String!
-    $password: String!
-    $name: String!
-  ) {
-    signup(
-      email: $email
-      password: $password
-      name: $name
-    ) {
-      token
-    }
-  }
-`;
+        mutation SignupMutation(
+            $email: String!
+            $username: String!
+            $name: String!
+            $password: String!
+            $picture: String!
+        ) {
+            signup(
+                email: $email
+                password: $password
+                name: $name
+                username: $username
+                picture: $picture
+            ) {
+                token
+            }
+        }
+    `;
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation(
@@ -53,7 +57,11 @@ const Login = () => {
     login: true,
     email: '',
     password: '',
-    name: ''
+    name: '', 
+    confirmPassword: "",
+    picture: null,
+    pictureUrl: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
+    errors: {}
   });
 
   const [login] = useMutation(LOGIN_MUTATION, {
@@ -78,9 +86,35 @@ const Login = () => {
       history.push('/');
     }
   });
+
+      function addPhoto(e) {
+        e.preventDefault();
+        const profilePhoto = new FileReader();
+        const photo = e.target.files[0];
+
+        profilePhoto.onloadend = () => {
+            let newPhotoUrl = formState.pictureUrl;
+            newPhotoUrl = profilePhoto.result
+
+            let newPhoto = formState.picture;
+            newPhoto = photo;
+
+            setFormState({ 
+              ...formState,
+              pictureUrl: newPhotoUrl, 
+              picture: newPhoto });
+        }
+
+        if (photo) {
+            profilePhoto.readAsDataURL(photo);
+        } else {
+            alert("Please choose another file type")
+        }
+    }
+
   return (
     <div>
-      <h4 className="mv3">{login ? 'Login' : 'Sign Up'}</h4>
+      <h4 className="mv3">{formState.login ? 'Login' : 'Sign Up'}</h4>
       <div className="flex flex-column">
         {!formState.login && (
           <input
@@ -95,6 +129,32 @@ const Login = () => {
             placeholder="Your name"
           />
         )}
+        {!formState.login && (
+          <input
+            value={formState.email}
+            onChange={(e) =>
+              setFormState({
+                ...formState,
+                email: e.target.value
+              })
+            }
+            type="text"
+            placeholder="Your email"
+          />
+        )}
+        {!formState.login && (
+          <input
+            value={formState.username}
+            onChange={(e) =>
+              setFormState({
+                ...formState,
+                username: e.target.value
+              })
+            }
+            type="text"
+            placeholder="Your username"
+          />
+        )}
         <input
           value={formState.email}
           onChange={(e) =>
@@ -106,6 +166,22 @@ const Login = () => {
           type="text"
           placeholder="Your email address"
         />
+        {!formState.login && (
+          <>
+          <div className="form-item">
+              <label>Picture*</label>
+              <div style={{ backgroundImage: `url(${formState.pictureUrl})` }} className="picture-container"></div>
+          </div>
+          <div className="photo-input-item">
+          <input 
+              onChange={addPhoto} 
+              id="profile-photo" 
+              className="photo-input" 
+              type="file"
+          />
+          </div>
+          </>
+        )}
         <input
           value={formState.password}
           onChange={(e) =>
