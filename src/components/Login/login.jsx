@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { useHistory } from 'react-router';
+
 const AUTH_TOKEN = 'auth-token';
 
 const SIGNUP_MUTATION = gql`
@@ -45,20 +46,22 @@ const Login = () => {
     confirmPassword: "",
     picture: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
     pictureUrl: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
-    errors: {}
+    error: []
   });
 
-  const [login, {loading, error}] = useMutation(LOGIN_MUTATION, {
+  const [login] = useMutation(LOGIN_MUTATION, {
     variables: {
       email: formState.email,
       password: formState.password
     },
     onCompleted: (data) => {
       const { token } = data.login;
-      localStorage.setItem(AUTH_TOKEN, token);
-      history.push('/confirmation');
+      if (token) {
+        localStorage.setItem(AUTH_TOKEN, token);
+        history.push('/confirmation');
+      }
     }
-  });
+  })
 
   const [signup] = useMutation(SIGNUP_MUTATION, {
     variables: {
@@ -69,11 +72,27 @@ const Login = () => {
       picture: formState.picture
     },
     onCompleted: (data) => {
-      const { token } = data.signup;
-      localStorage.setItem(AUTH_TOKEN, token);
-      history.push('/confirmation');
+      const { token } = data.signUp;
+      if (token) {
+        localStorage.setItem(AUTH_TOKEN, token);
+        history.push('/confirmation');
+      }
     }
   });
+
+  const handleSubmit = async () => {
+    const submitType = formState.login ? login : signup;
+    try {
+      const { data } = await submitType()
+      setFormState(data) 
+    } catch (e) {
+      setFormState({
+          ...formState,
+          error: [e]
+      })
+      renderErrors();
+    }
+  }
 
   function addPhoto(e) {
     e.preventDefault();
@@ -99,7 +118,16 @@ const Login = () => {
             alert("Please choose another file type")
         }
   }
-
+  function renderErrors() {
+    if (formState.error.length > 0) {
+      return (
+                <p>
+                    {formState.error[0].message.split(": ")[1]}
+                </p>
+        );
+    }
+        
+  }
   return (
     <div>
       <h4 className="mv3">{formState.login ? 'Login' : 'Sign Up'}</h4>
@@ -176,27 +204,12 @@ const Login = () => {
           type="password"
           placeholder="Choose a safe password"
         />
-        {!formState.login && (
-          <div className="form-item">
-              <label>Confirm Password*</label>
-              <div className="input-item">
-                  <input 
-                  value={formState.confirmPassword}
-                  onChange={(e) =>
-                      setFormState({
-                          ...formState,
-                          confirmPassword: e.target.value
-                      })}
-                  type="text"
-                  placeholder="Confirm your password"></input>
-              </div>
-          </div>
-        )}
       </div>
+      {renderErrors()}
       <div className="flex mt3">
         <button
           className="pointer mr2 button"
-          onClick={formState.login ? login : signup}
+          onClick={handleSubmit}
         >
           {formState.login ? 'login' : 'create account'}
         </button>
