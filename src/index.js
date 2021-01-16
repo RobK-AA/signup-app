@@ -1,34 +1,47 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
-import Root from './components/Root';
+import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+import ApolloClient from "apollo-client";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { createHttpLink } from "apollo-link-http";
+import { ApolloProvider } from "@apollo/client";
+import { onError } from "apollo-link-error";
+import { ApolloLink } from "apollo-link";
+import { HashRouter } from 'react-router-dom';
 
-// 1
-import {
-  ApolloProvider,
-  ApolloClient,
-  InMemoryCache
-} from '@apollo/client';
+const cache = new InMemoryCache({
+  dataIdFromObject: object => object._id || null
+});
+
+const httpLink = createHttpLink({
+  uri: "http://localhost:4000/graphql"
+});
+
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+});
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache(),
-  headers: {
-    authorization: localStorage.getItem("auth-token")
-  },
+  link: ApolloLink.from([errorLink, httpLink]),
+  cache,
   onError: ({ networkError, graphQLErrors }) => {
     console.log("graphQLErrors", graphQLErrors);
     console.log("networkError", networkError);
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const root = document.getElementById('root');
-  ReactDOM.render(
-  <ApolloProvider client={client}>
-    <Root />
-  </ApolloProvider>, root);
-});
+const Root = () => {
+  return (
+    <ApolloProvider client={client}>
+      <HashRouter>
+        <App />
+      </HashRouter> 
+    </ApolloProvider>
+  );
+};
+
+ReactDOM.render(<Root />, document.getElementById("root"));
 
 serviceWorker.unregister();

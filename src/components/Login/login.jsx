@@ -11,7 +11,7 @@ const SIGNUP_MUTATION = gql`
             $password: String!
             $picture: String!
         ) {
-            signup(
+            signUp(
                 email: $email
                 password: $password
                 name: $name
@@ -37,13 +37,13 @@ const LOGIN_MUTATION = gql`
 const Login = () => {
   const history = useHistory();
   const [formState, setFormState] = useState({
-    login: true,
+    login: false,
     email: '',
     password: '',
     name: '', 
     username: '',
     confirmPassword: "",
-    picture: null,
+    picture: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
     pictureUrl: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
     errors: {}
   });
@@ -53,9 +53,10 @@ const Login = () => {
       email: formState.email,
       password: formState.password
     },
-    onCompleted: ({ login }) => {
-      localStorage.setItem(AUTH_TOKEN, login.token);
-      history.push('/');
+    onCompleted: (data) => {
+      const { token } = data.login;
+      localStorage.setItem(AUTH_TOKEN, token);
+      history.push('/confirmation');
     }
   });
 
@@ -67,9 +68,10 @@ const Login = () => {
       username: formState.username,
       picture: formState.picture
     },
-    onCompleted: ({ signup }) => {
-      localStorage.setItem(AUTH_TOKEN, signup.token);
-      history.push('/');
+    onCompleted: (data) => {
+      const { token } = data.signup;
+      localStorage.setItem(AUTH_TOKEN, token);
+      history.push('/confirmation');
     }
   });
 
