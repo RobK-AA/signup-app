@@ -15,9 +15,10 @@ const prisma = new PrismaClient({
     errorFormat: 'minimal'
 });
 
-const corsOptions = {
-    credentials: true
-  };
+// const corsOptions = {
+//     origin: "http://localhost:3000",
+//     credentials: true
+//   };
 
 const server = new ApolloServer({
     typeDefs: fs.readFileSync(
@@ -34,7 +35,7 @@ const server = new ApolloServer({
                     : null
         }
     },
-    cors: corsOptions
+    // cors: corsOptions
 })
 
 server
