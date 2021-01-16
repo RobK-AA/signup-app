@@ -218,7 +218,8 @@ const Login = () => {
           onClick={(e) =>
             setFormState({
               ...formState,
-              login: !formState.login
+              login: !formState.login,
+              error: []
             })
           }
         >
