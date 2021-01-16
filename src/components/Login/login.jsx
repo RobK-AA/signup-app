@@ -39,11 +39,10 @@ const Login = () => {
   const history = useHistory();
   const [formState, setFormState] = useState({
     login: false,
-    email: '',
-    password: '',
-    name: '', 
-    username: '',
-    confirmPassword: "",
+    email: null,
+    password: null,
+    name: null, 
+    username: null,
     picture: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
     pictureUrl: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
     error: []
@@ -58,6 +57,7 @@ const Login = () => {
       const { token } = data.login;
       if (token) {
         localStorage.setItem(AUTH_TOKEN, token);
+        localStorage.setItem('email', formState.email);
         history.push('/confirmation');
       }
     }
@@ -75,6 +75,7 @@ const Login = () => {
       const { token } = data.signUp;
       if (token) {
         localStorage.setItem(AUTH_TOKEN, token);
+        localStorage.setItem('email', formState.email);
         history.push('/confirmation');
       }
     }
@@ -118,12 +119,31 @@ const Login = () => {
             alert("Please choose another file type")
         }
   }
+  function update(field) {
+        return e => {
+            if (formState.error.length > 1) setFormState({ error: [] });
+            setFormState({
+                ...formState,
+                [field]: e.currentTarget.value
+            });
+        };
+    }
+
   function renderErrors() {
+
+    
     if (formState.error.length > 0) {
+      const message = formState.error[0].message.split(": ")[1];
       return (
-                <p>
-                    {formState.error[0].message.split(": ")[1]}
-                </p>
+                <div>
+                    {message}
+                    <p>
+                      {message === "Response not successful" ? 
+                      'Did you fill out all required fields?' : 
+                      null}
+                    </p>
+                    
+                </div>
         );
     }
         
@@ -136,13 +156,7 @@ const Login = () => {
           <>
           <label>Username*</label>
           <input
-            value={formState.username}
-            onChange={(e) =>
-              setFormState({
-                ...formState,
-                username: e.target.value
-              })
-            }
+            onChange={update('username')}
             type="text"
             placeholder="Your username"
           />
@@ -152,13 +166,7 @@ const Login = () => {
           <>
           <label>Name*</label>
           <input
-            value={formState.name}
-            onChange={(e) =>
-              setFormState({
-                ...formState,
-                name: e.target.value
-              })
-            }
+            onChange={update('name')}
             type="text"
             placeholder="Your name"
           />
@@ -166,13 +174,7 @@ const Login = () => {
         )}
         <label>Email Address*</label>
         <input
-          value={formState.email}
-          onChange={(e) =>
-            setFormState({
-              ...formState,
-              email: e.target.value
-            })
-          }
+          onChange={update('email')}
           type="text"
           placeholder="Your email address"
         />
@@ -194,13 +196,7 @@ const Login = () => {
         )}
         <label>Password*</label>
         <input
-          value={formState.password}
-          onChange={(e) =>
-            setFormState({
-              ...formState,
-              password: e.target.value
-            })
-          }
+          onChange={update('password')}
           type="password"
           placeholder="Choose a safe password"
         />
@@ -219,7 +215,11 @@ const Login = () => {
             setFormState({
               ...formState,
               login: !formState.login,
-              error: []
+              error: [],
+              email: null,
+              password: null,
+              name: null,
+              username: null
             })
           }
         >
@@ -228,6 +228,12 @@ const Login = () => {
             : 'already have an account?'}
         </button>
       </div>
+      <p>{formState.username}</p>
+      <p>{formState.name}</p>
+      <p>{formState.email}</p>
+      <p>{formState.picture}</p>
+      <p>{formState.password}</p>
+
     </div>
   );
 };
