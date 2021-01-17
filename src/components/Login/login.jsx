@@ -43,7 +43,7 @@ const Login = () => {
     password: null,
     name: null, 
     username: null,
-    picture: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
+    picture: ["https://img.icons8.com/ios-glyphs/100/000000/test-account.png"],
     pictureUrl: "https://img.icons8.com/ios-glyphs/100/000000/test-account.png",
     error: []
   });
@@ -69,7 +69,7 @@ const Login = () => {
       email: formState.email,
       password: formState.password,
       username: formState.username,
-      picture: formState.picture
+      picture: formState.picture[0]
     },
     onCompleted: (data) => {
       const { token } = data.signUp;
@@ -99,29 +99,29 @@ const Login = () => {
     e.preventDefault();
     const profilePhoto = new FileReader();
     const photo = e.target.files[0];
-
+    
     profilePhoto.onloadend = () => {
-        let newPhotoUrl = formState.pictureUrl;
-        newPhotoUrl = profilePhoto.result
-
-        let newPhoto = formState.picture;
-        newPhoto = photo;
-
+        let newPhotoUrl = profilePhoto.result;
+        
+        let newPhoto = photo;
         setFormState({ 
             ...formState,
             pictureUrl: newPhotoUrl, 
-            picture: newPhoto 
+            picture: [newPhoto] 
         });
     }
-        if (photo) {
-            profilePhoto.readAsDataURL(photo);
-        } else {
-            alert("Please choose another file type")
-        }
+    
+    if (photo) {
+ 
+        profilePhoto.readAsDataURL(photo);
+    } else {
+        alert("Please choose another file type")
+    }
   }
+
   function update(field) {
         return e => {
-            if (formState.error.length > 1) setFormState({ error: [] });
+            if (formState.error.length > 0) setFormState({ error: [] });
             setFormState({
                 ...formState,
                 [field]: e.currentTarget.value
@@ -136,21 +136,21 @@ const Login = () => {
       const message = formState.error[0].message.split(": ")[1];
       return (
                 <div>
-                    {message}
                     <p>
                       {message === "Response not successful" ? 
                       'Did you fill out all required fields?' : 
-                      null}
+                      message}
                     </p>
-                    
                 </div>
         );
     }
         
   }
   return (
-    <div>
+    <div className="form-container">
       <h4 className="mv3">{formState.login ? 'Login' : 'Sign Up'}</h4>
+      <h4>* = required field</h4>
+      <div className="flex flex-column flex-outer">
       <div className="flex flex-column">
         {!formState.login && (
           <>
@@ -190,6 +190,7 @@ const Login = () => {
               id="profile-photo" 
               className="photo-input" 
               type="file"
+              title=" "
           />
           </div>
           </>
@@ -198,7 +199,7 @@ const Login = () => {
         <input
           onChange={update('password')}
           type="password"
-          placeholder="Choose a safe password"
+          placeholder={formState.login ? "Enter your password" : "Choose a safe password"}
         />
       </div>
       {renderErrors()}
@@ -207,7 +208,7 @@ const Login = () => {
           className="pointer mr2 button"
           onClick={handleSubmit}
         >
-          {formState.login ? 'login' : 'create account'}
+          {formState.login ? 'Log In' : 'Sign Up'}
         </button>
         <button
           className="pointer button"
@@ -224,16 +225,11 @@ const Login = () => {
           }
         >
           {formState.login
-            ? 'need to create an account?'
-            : 'already have an account?'}
+            ? 'Need to sign up?'
+            : 'Already have an account?'}
         </button>
       </div>
-      <p>{formState.username}</p>
-      <p>{formState.name}</p>
-      <p>{formState.email}</p>
-      <p>{formState.picture}</p>
-      <p>{formState.password}</p>
-
+      </div>
     </div>
   );
 };
