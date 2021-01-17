@@ -81,7 +81,7 @@ class Signup extends React.Component {
             if (this.state.email === null || this.state.email.length === 0 || this.state.password === null || this.state.password.length === 0) {
                 this.setState({ error: ["Please enter your email & password"]})
             } else {
-                this.setState({ error: ["No user found"]})
+                this.setState({ error: ["Incorrect username/password combo"]})
             }
         } else if (formType === "signup") {
 
@@ -216,7 +216,7 @@ class Signup extends React.Component {
             {loginUser => (
 
             <div className="form-container">
-                <h4 className="mv3">{this.state.login ? 'Login' : 'Sign Up'}</h4>
+                <h4 className="mv3">{this.state.login ? 'Log In' : 'Sign Up'}</h4>
                 <h4>* = required field</h4>
                 <form
                 onSubmit={e => {
