@@ -120,14 +120,14 @@ const Login = () => {
   }
 
   function update(field) {
-        return e => {
-            if (formState.error.length > 0) setFormState({ error: [] });
-            setFormState({
-                ...formState,
-                [field]: e.currentTarget.value
-            });
-        };
-    }
+      return e => {
+          if (formState.error.length > 0) setFormState({ error: [] });
+          setFormState({
+              ...formState,
+              [field]: e.currentTarget.value
+          });
+      };
+  }
 
   function renderErrors() {
 

@@ -55,14 +55,18 @@ input {
 .flex-outer {
   display: inline-flex;
   border: #eb2127 solid 1px;
-  padding: 3% 2% 3% 2%;
+  padding: 1% 2% 2% 2%;
+}
+
+.mt3 {
+  align-self: center;
 }
 
 .mv3 {
   font-weight: 700;
   font-size: 56px;
   font-family: sans-serif;
-  color: #eb2127;
+  color: #7CDA24;
   text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
 }
 
@@ -77,4 +81,32 @@ input {
 button:hover {
   background-color: #7CDA24;
   color: black;
+}
+
+.pointer {
+  margin-top: 1%;
+}
+
+label {
+  margin: 2% 0 2% 0;
+}
+
+.confirmation-container {
+  display: flex;
+  justify-content: center;
+}
+
+.confirmation-user {
+  display: block;
+  text-align: center;
+}
+
+.greeting-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: larger !important;
+  font-weight: 700;
+}
+
+.user-picture {
+  text-align: -webkit-center;
 }
