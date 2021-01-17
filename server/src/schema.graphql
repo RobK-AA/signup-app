@@ -12,6 +12,7 @@ type Mutation {
     password: String!, 
     picture: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
+  logout(id: ID!): User!
 }
 
 type User {
@@ -21,9 +22,12 @@ type User {
   email: String!
   password: String!
   picture: String!
+  isLoggedIn: Boolean!
+  token: String!
 }
 
 type AuthPayload {
   token: String
+  isLoggedIn: Boolean
   user: User
 }

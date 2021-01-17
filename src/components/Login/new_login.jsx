@@ -76,7 +76,6 @@ class Signup extends React.Component {
         const formType = this.state.login ? "login" : "signup";
         const emailExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const isValidEmail =  emailExpression.test(String(this.state.email).toLowerCase());
-
         if (formType === "login") {
             if (this.state.email === null || this.state.email.length === 0 || this.state.password === null || this.state.password.length === 0) {
                 this.setState({ error: ["Please enter your email & password"]})
@@ -84,15 +83,12 @@ class Signup extends React.Component {
                 this.setState({ error: ["Incorrect username/password combo"]})
             }
         } else if (formType === "signup") {
-
             if (this.state.email === null || this.state.email.length === 0 || 
                 this.state.password === null || this.state.password.length === 0 ||
                 this.state.name === null || this.state.name.length === 0 || 
                 this.state.username === null || this.state.username.length === 0) {
-
                     this.setState({ error: ["Please fill out all required fields"]})
                 } else if (this.state.password && this.state.name && this.state.email && this.state.username && this.state.password.length < 6) {
-
                     this.setState({ error: ["Password must be at least 6 characters"]})
                 } else if (!isValidEmail) {
                     this.setState({ error: ["Please enter a valid email"]})
