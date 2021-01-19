@@ -10,9 +10,6 @@ import { ApolloProvider } from "react-apollo";
 import { onError } from "apollo-link-error";
 import { ApolloLink } from "apollo-link";
 import { HashRouter } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
-import { setAuthToken } from './util/session_util';
-import { logout } from './actions/session_actions';
 
 const cache = new InMemoryCache({
   dataIdFromObject: object => object._id || null
