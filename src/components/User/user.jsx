@@ -1,13 +1,15 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import { USER_QUERY } from '../../util/session_util';
 import { Query } from "react-apollo";
 import { useQuery } from 'react-apollo';
 
 const User = () => {
   const userEmail = localStorage.getItem('email');
-  const { loading, error, data } = useQuery(USER_QUERY, {
+  const { data } = useQuery(USER_QUERY, {
     variables: { email: userEmail },
   });
+  const history = useHistory();
   return (
     <div>
       {data && (
@@ -29,26 +31,21 @@ const User = () => {
                 <div style={{ backgroundImage: `url(${data.user.picture})` }} className="picture-container"></div>
                 <h5>{data.user.picture}</h5>
               </div>
+              <div className="flex mt3" style={{display:"contents"}}>
+                    <button
+                        className="pointer mr2 button"
+                        type="submit"
+                        onClick={() => history.push('/')}
+                    >
+                    Back to form
+                    </button>
+                    
+                </div>
             </div>
         </div>
       )}
     </div>
   );
-
-  // return (
-  //   <Query query={USER_QUERY}>
-  //     {({ loading, error, data }) => {
-  //       if (loading) return "Loading...";
-  //       if (error) return `Error! ${error.message}`;
-
-  //       return (
-  //         <div>
-  //           {data.user.name}, {data.user.username}, {data.user.email}, {data.user.picture}
-  //         </div>
-  //       );
-  //     }}
-  //   </Query>
-  // );
 };
 
 export default User;

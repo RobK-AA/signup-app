@@ -108,101 +108,14 @@ class Signup extends React.Component {
     }
 
     render() {
-        // return (
-            // <div className="form-container">
-            //     <h4 className="mv3">{this.state.login ? 'Login' : 'Sign Up'}</h4>
-            //     <h4>* = required field</h4>
-            //     // <div className="flex flex-column flex-outer">
-            //     // <div className="flex flex-column">
-            //     //     {!this.state.login && (
-                //     <>
-                //     <label>Username*</label>
-                //     <input
-                //         onChange={this.update('username')}
-                //         type="text"
-                //         placeholder="Your username"
-                //     />
-                //     </>
-                //     )}
-                //     {!this.state.login && (
-                //     <>
-                //     <label>Name*</label>
-                //     <input
-                //         onChange={this.update('name')}
-                //         type="text"
-                //         placeholder="Your name"
-                //     />
-                //     </>
-                //     )}
-                //     <label>Email Address*</label>
-                //     <input
-                //         onChange={this.update('email')}
-                //         type="text"
-                //         placeholder="Your email address"
-                //     />
-                //     {!this.state.login && (
-                //     <>
-                //     <div className="form-item">
-                //         <label>Picture*</label>
-                //     <div style={{ backgroundImage: `url(${this.state.pictureUrl})` }} className="picture-container"></div>
-                //     </div>
-                //     <div className="photo-input-item">
-                //     <input 
-                //         onChange={this.addPhoto} 
-                //         id="profile-photo" 
-                //         className="photo-input" 
-                //         type="file"
-                //         title=" "
-                //     />
-                //     </div>
-                //     </>
-                //     )}
-                //     <label>Password*</label>
-                //     <input
-                //         onChange={this.update('password')}
-                //         type="password"
-                //         placeholder={this.state.login ? 
-                //             "Enter your password" : "Choose a safe password"}
-                //     />
-                // </div>
-                // {this.renderErrors()}
-                // <div className="flex mt3">
-                //     <button
-                //         className="pointer mr2 button"
-                //         onClick={this.handleSubmit}
-                //     >
-                //     {this.state.login ? 'Log In' : 'Sign Up'}
-                //     </button>
-                //     <button
-                //         className="pointer button"
-                //         onClick={(e) =>
-                //             this.setState({
-                //             login: !this.state.login,
-                //             error: [],
-                //             email: null,
-                //             password: null,
-                //             name: null,
-                //             username: null
-                //         })}
-                //     >
-                //     {this.state.login
-                //     ? 'Need to sign up?'
-                //     : 'Already have an account?'}
-                //     </button>
-        //             </div>
-        //         </div>
-        //     </div>
-        // );
         return (
         <Mutation
             mutation={this.state.login ? LOGIN : SIGNUP}
             onError={err => {
                     this.handleErrors(err);
-                    console.log(err);
                 }
             }
             onCompleted={data => {
-            console.log(data)
             const { token } = data.login || data.signUp;
             localStorage.setItem('email', this.state.email);
             localStorage.setItem("auth-token", token);
